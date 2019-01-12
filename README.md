@@ -1,7 +1,7 @@
 Lambda-kube is a Clojure library for building inputs for Kubernetes.
 
-[![Clojars Project](https://img.shields.io/clojars/v/brosenan/lambdakube.svg)](https://clojars.org/brosenan/lambdakube)
-[![Build Status](https://travis-ci.com/brosenan/lambda-kube.svg?branch=master)](https://travis-ci.com/brosenan/lambda-kube)
+[![Clojars Project](https://img.shields.io/clojars/v/parkside-securities/lambdakube.svg)](https://clojars.org/parkside-securities/lambdakube)
+[![Build Status](https://travis-ci.com/parkside-securities/lambda-kube.svg?branch=master)](https://travis-ci.com/parkside-securities/lambda-kube)
 
 # Usage
 Add lambdakube as a dependency to your `project.clj`, and

@@ -1,6 +1,6 @@
-(defproject brosenan/lambdakube "0.10.1-SNAPSHOT"
+(defproject parkside-securities/lambdakube "0.10.1-SNAPSHOT"
   :description "A Clojure library for generating Kubernetes API objects "
-  :url "https://github.com/brosenan/lambda-kube"
+  :url "https://github.com/parkside-securities/lambda-kube"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.9.0"]
