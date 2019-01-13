@@ -12,7 +12,6 @@
   :profiles {:dev {:dependencies [[midje "1.9.2"]]
                    :plugins [[lein-midje "3.2.1"]
                              [lein-auto "0.1.3"]]}}
-  :repositories [["clojars" {:url "https://clojars.org/repo"
-                             :username :env/clojar_username
-                             :password :env/clojar_password}]]
-  :deploy-repositories [["clojars" :clojars]])
+  :repositories [["clojar" {:url "https://clojars.org/repo"
+                             :username [:gpg :env/clojar_username]
+                             :password [:gpg :env/clojar_password]}]])

@@ -2,4 +2,4 @@ language: clojure
 lein: 2.7.1
 script: |
     lein midje
-    lein deploy clojars
+    lein deploy clojar
