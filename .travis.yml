@@ -1,3 +1,5 @@
 language: clojure
 lein: 2.7.1
-script: lein do midje, deploy clojars
+script: |
+    lein midje
+    lein deploy clojars
