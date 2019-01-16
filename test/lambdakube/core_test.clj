@@ -172,7 +172,24 @@
                                 {:name :FOO
                                  :value "BAR"}]}]}})
 
+;; `add-env-value-from` adds environment variable bindings with key reference as the value.
+(fact
+ (-> (lk/pod :foo {})
+     (lk/add-container :bar "bar-image" (-> {:ports [{:containerPort 80}]}
+                                            (lk/add-env-value-from {:FOO (lk/secret-key-ref "aKey" "aName" false)}))))
+ => {:apiVersion "v1"
+     :kind "Pod"
+     :metadata {:name :foo
+                :labels {}}
+     :spec {:containers [{:name :bar
+                          :image "bar-image"
+                          :ports [{:containerPort 80}]
+                          :env [{:name :FOO
+                                 :valueFrom {:secretKeyRef {:key "aKey", :name "aName", :optional false}}}]}]}})
+
 ;; `add-init-container` adds a new [init container](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/) to a pod.
+
+
 (fact
  (-> (lk/pod :foo {})
      (lk/add-init-container :bar "my-image:tag"))
@@ -254,8 +271,8 @@
                                            {:key "c1"
                                             :path "bin/script.sh"}]}}]}
      :$additional [(lk/config-map :unique1234
-                                   {"c0" (lk/to-yaml {:foo :bar})
-                                    "c1" "echo hello world"})]})
+                                  {"c0" (lk/to-yaml {:foo :bar})
+                                   "c1" "echo hello world"})]})
 
 ;; The `add-volume-claim-template` function takes a stateful-set, adds
 ;; a volume claim template to its spec and mounts it to the given
@@ -1215,6 +1232,8 @@
 
 
 ;; Regular expressions match strings that, well, match them...
+
+
 (fact
  (let [m (lk/matcher #"hello.*")]
    (m {} {}) => false
@@ -1261,6 +1280,8 @@
 
 ;; `to-yaml` takes a vector of API objects and returns a YAML string
 ;; acceptable by Kubernetes.
+
+
 (fact
  (-> (lk/pod :nginx-deployment {:app :nginx})
      (lk/add-container :nginx "nginx:1.7.9")
@@ -1367,6 +1388,8 @@ spec:
 
 ;; For a map that does not contain `:$additional`, the map is returned
 ;; as-is, and the `:additional` meta-field is empty.
+
+
 (fact
  (let [ext (lk/extract-additional {:foo :bar})]
    ext => {:foo :bar}
@@ -1485,12 +1508,12 @@ spec:
                         ;; else
                         node))
                     (fn [node rule ctx]
-                       (if (= (:kind node) "Deployment")
-                         (update-in node [:spec :template] rule (merge ctx
-                                                                       {:kind "Pod"
-                                                                        :foo true}))
+                      (if (= (:kind node) "Deployment")
+                        (update-in node [:spec :template] rule (merge ctx
+                                                                      {:kind "Pod"
+                                                                       :foo true}))
                          ;; else
-                         node))]}
+                        node))]}
        depl (-> (lk/pod :foo {})
                 (lk/add-container :bar "bar-image")
                 (lk/add-container :baz "baz-image")
@@ -1540,8 +1563,8 @@ spec:
                 (lk/job :Never))]
    (lk/apply-aug-rule $ rule depl)
    => (-> (lk/pod :foo {:label :bar})
-                (lk/add-container :bar "some-image" {:comment "This is a match!"})
-                (lk/job :Never))))
+          (lk/add-container :bar "some-image" {:comment "This is a match!"})
+          (lk/job :Never))))
 
 ;; Init-containers are extracted as well, with `:kind` as
 ;; `:InitContainer`.
@@ -1557,5 +1580,5 @@ spec:
                 (lk/job :Never))]
    (lk/apply-aug-rule $ rule depl)
    => (-> (lk/pod :foo {:label :bar})
-                (lk/add-init-container :bar "some-image" {:comment "This is a match!"})
-                (lk/job :Never))))
+          (lk/add-init-container :bar "some-image" {:comment "This is a match!"})
+          (lk/job :Never))))

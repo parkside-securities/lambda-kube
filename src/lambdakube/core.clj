@@ -91,6 +91,12 @@
    :metadata {:name name}
    :data m})
 
+(defn secret-key-ref
+  [k n optional?]
+  {:secretKeyRef {:key k
+                  :name n
+                  :optional optional?}})
+
 (defn add-container
   ([pod name image options]
    (let [container (-> options
@@ -102,8 +108,15 @@
 
 (defn add-env [container envs]
   (let [envs (for [[name val] envs]
-                           {:name name
-                            :value val})]
+               {:name name
+                :value val})]
+    (-> container
+        (update :env concat envs))))
+
+(defn add-env-value-from [container envs]
+  (let [envs (for [[name val] envs]
+               {:name name
+                :valueFrom val})]
     (-> container
         (update :env concat envs))))
 
@@ -404,7 +417,7 @@
                           (contains? (:spec node) :containers))
                    (update-in node [:spec :containers] #(map (fn [c]
                                                                (rule c (-> ctx
-                                                                                 (merge {:kind "Container"})))) %))
+                                                                           (merge {:kind "Container"})))) %))
                    ;; else
                    node))
                (fn [node rule ctx]
@@ -425,4 +438,3 @@
         nodes
         ;; else
         (recur nodes')))))
-
