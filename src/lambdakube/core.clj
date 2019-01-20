@@ -225,6 +225,18 @@
                           (assoc ports :nodePort svcport))]
               (update svc :spec field-conj :ports ports)))))
 
+(defn ingress [depl name attrs f]
+  (let [pod (-> depl :spec :template)
+        ing (-> {:kind "Ingress"
+                 :apiVersion "extensions/v1beta1"
+                 :metadata {:name name}
+                 :spec attrs}
+                f)
+        depl (-> depl
+                 (field-conj :$additional ing)
+                 (update :spec assoc :template pod))]
+    depl))
+
 (defn injector []
   {:rules []
    :descs []})
