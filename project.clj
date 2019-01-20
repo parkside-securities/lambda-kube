@@ -1,4 +1,4 @@
-(defproject parkside-securities/lambdakube "0.10.1"
+(defproject parkside-securities/lambdakube "0.10.1-SNAPSHOT"
   :description "A Clojure library for generating Kubernetes API objects "
   :url "https://github.com/parkside-securities/lambda-kube"
   :license {:name "Eclipse Public License"
